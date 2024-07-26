@@ -15,7 +15,7 @@ Aplicación/servicio en SpringBoot que provea una end point rest de consulta  ta
   - Acepte como parámetros de entrada: fecha de aplicación, identificador de producto, identificador de cadena.
   - Devuelva como datos de salida: identificador de producto, identificador de cadena, tarifa a aplicar, fechas de aplicación y precio final a aplicar.
 
-Consta de una base de datos donde se encuentrade la tabla PRICES que refleja el precio final (pvp) y la tarifa que aplica a un producto de una cadena entre unas fechas determinadas. Ejemplo de la tabla y sus campos:
+Consta de una base de datos donde se encuentra la tabla PRICES que refleja el precio final (pvp) y la tarifa que aplica a un producto de una cadena entre unas fechas determinadas. Ejemplo de la tabla y sus campos:
  
 <p align="center"><img src="https://www.soy3eres.es/tabla%20PRICES.PNG"/></p> 
 
