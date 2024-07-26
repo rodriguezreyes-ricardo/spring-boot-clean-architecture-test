@@ -24,6 +24,7 @@ Consta de una base de datos donde se encuentra la tabla PRICES que refleja el pr
   - Spring Boot
   - Java17
   - Base de datos H2
+  - Swagger2
   - JUnit,Mockito
 
 #### Dependencias Maven de proyecto
