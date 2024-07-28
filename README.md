@@ -40,6 +40,17 @@ A través de esta arquitectura se logra que el dominio sea el núcleo de todas l
 #### Extructura del proyecto
 <p align="center"><img src="https://www.soy3eres.es/extructura%20de%20proyecto.PNG"/></p>
 
+En el proyecto tenemos el negocio, que básicamernte son <b>casos de uso</b> y <b>entidades de negocio</b>, donde los casos de uso son las funcionalidades. En la periferia del negocio tenemos los <b>puertos</b> representados por las interfaces. 
+
+Independiente a este núcleo, tenemos los <b>adaptadores</b>, divididos en adaptadores de entrada y de salida. Los adaptadores de entrada son aquellos a través de los cuales se introducen datos a la aplicación (ApiRest, Frontend, etc), los de salida permiten a la aplicación comunicarse con el mundo exterior (conexión a base de datos o acceso al mecanismo de persistencia, otras API que consuman este servicio, etc).
+
+Las interfaces (<b>puertos</b>) son implementadas por los <b>adaptadores</b> y son usadas por los <b>casos de uso</b>. Esta arquitectura permite que el dominio no dependa de nada, quedando totalmente desacoplado.
+
+En el pom del proyecto tenemos las dependencias necesarias: JPA para el sistema de persistencia con la base de datos, MVC para la creación del API Rest, H2 como base de datos, finalmente Junit y Mockito para los test.
+
+En el fichero de configuración del proyecto tenemos configurado el DataSource de la base de datos H2.
+Contamos con un fichero de inicialización (initilization.java) para introducir los datos de prueba en la base de datos.
+
 ## Autor/es
 ---
 Ricardo Rodríguez Reyes
