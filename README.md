@@ -49,7 +49,10 @@ Las interfaces (<b>puertos</b>) son implementadas por los <b>adaptadores</b> y s
 En el pom del proyecto tenemos las dependencias necesarias: JPA para el sistema de persistencia con la base de datos, MVC para la creación del API Rest, H2 como base de datos, finalmente Junit y Mockito para los test.
 
 En el fichero de configuración del proyecto tenemos configurado el DataSource de la base de datos H2.
+
 Contamos con un fichero de inicialización (initilization.java) para introducir los datos de prueba en la base de datos.
+
+También se utiliza Swagger UI para la generación de una consola API donde poder ejecutar prueba de API Rest (<b>localhost:8080/swagger-ui.html</b>).
 
 ## Autor/es
 ---
