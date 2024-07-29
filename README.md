@@ -52,7 +52,7 @@ En el fichero de configuración del proyecto tenemos configurado el DataSource d
 
 Contamos con un fichero de inicialización (initilization.java) para introducir los datos de prueba en la base de datos.
 
-También se utiliza Swagger UI para la generación de una consola API donde poder ejecutar prueba de API Rest (<b>localhost:8080/swagger-ui.html</b>).
+También se utiliza Swagger UI para la generación de una consola API donde poder ejecutar pruebas de API Rest (<b>localhost:8080/swagger-ui.html</b>).
 
 ## Autor/es
 ---
