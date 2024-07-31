@@ -141,27 +141,4 @@ public class ProductPricesControllerTest {
 				.getResponse().getContentAsString();
 
 	}
-
-	/**
-	 * Test get spain against file.
-	 *
-	 * @throws Exception the exception
-	 */
-	/*
-	 * @Test void testGetSpainAgainstFile() throws Exception { String
-	 * spainResponseJson = mockMvc
-	 * .perform(get("/price/{date}/{productId}/{brandId}", Dataset.DATE_4,
-	 * Dataset.PRODUCTID_4, Dataset.BRANDID_4))
-	 * .andExpect(status().is(HttpStatus.OK.value())).andReturn().getResponse().
-	 * getContentAsString();
-	 * 
-	 * Resource resource = new ClassPathResource("/responses/response4.json");
-	 * ObjectMapper mapper = new ObjectMapper(); Price price =
-	 * mapper.readValue(spainResponseJson, Price.class); JsonNode jsonNode =
-	 * mapper.readValue(resource.getFile(), JsonNode.class);
-	 * 
-	 * Price price2 = mapper.readValue(resource.getFile(), Price.class);
-	 * 
-	 * assertThat(price).isEqualTo(price2); }
-	 */
 }
