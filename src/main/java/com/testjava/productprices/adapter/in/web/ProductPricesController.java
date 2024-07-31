@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.testjava.productprices.application.port.in.InParams;
 import com.testjava.productprices.application.port.in.SearchPricePort;
 import com.testjava.productprices.common.WebAdapter;
+import com.testjava.productprices.domain.ExceptionPrice;
 import com.testjava.productprices.domain.Price;
 
 import io.swagger.annotations.Api;
@@ -39,31 +40,31 @@ public class ProductPricesController {
 		this.searchPricePort = searchPricePort;
 	}
 
-
 	/**
 	 * Search.
 	 *
-	 * @param date the date
+	 * @param date      the date
 	 * @param productId the product id
-	 * @param brandId the brand id
+	 * @param brandId   the brand id
 	 * @return the response entity
+	 * @throws ExceptionPrice the exception price
 	 */
 	@ApiOperation("Rate appied to the final price depending on the date.")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successful operation", response = Price.class),
 			@ApiResponse(code = 00, message = "Internal server error") })
 	@GetMapping(path = "/price/{date}/{productId}/{brandId}")
 	@Nullable
-	public ResponseEntity<Price> search(@PathVariable("date") Timestamp date,
-			@PathVariable("productId") Long productId, @PathVariable("brandId") Long brandId) {
+	public ResponseEntity<Price> search(@PathVariable("date") Timestamp date, @PathVariable("productId") Long productId,
+			@PathVariable("brandId") Long brandId) throws ExceptionPrice {
 		Price price = null;
 		InParams params = new InParams(brandId, date, productId);
 		try {
 			price = searchPricePort.search(params);
 		} catch (RuntimeException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ExceptionPrice();
 		}
-		
-		return new ResponseEntity<>(price.getId()!=null?price:null, HttpStatus.OK);
+
+		return new ResponseEntity<>(price.getId() != null ? price : null, HttpStatus.OK);
 	}
 
 }
