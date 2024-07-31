@@ -26,6 +26,7 @@ Consta de una base de datos donde se encuentra la tabla PRICES que refleja el pr
   - Base de datos H2
   - Swagger2
   - JUnit,Mockito
+  - Jacoco
 
 #### Dependencias Maven de proyecto
   <p align="center"><img src="https://www.soy3eres.es/dependencias%20maven.PNG"/></p>
@@ -46,7 +47,7 @@ Independiente a este núcleo, tenemos los <b>adaptadores</b>, divididos en adapt
 
 Las interfaces (<b>puertos</b>) son implementadas por los <b>adaptadores</b> y son usadas por los <b>casos de uso</b>. Esta arquitectura permite que el dominio no dependa de nada, quedando totalmente desacoplado.
 
-En el pom del proyecto tenemos las dependencias necesarias: JPA para el sistema de persistencia con la base de datos, MVC para la creación del API Rest, H2 como base de datos, finalmente Junit y Mockito para los test.
+En el pom del proyecto tenemos las dependencias necesarias: JPA para el sistema de persistencia con la base de datos, MVC para la creación del API Rest, H2 como base de datos, Jacoco como herramienta de analisis de cobertura de los test, finalmente Junit y Mockito para los test.
 
 En el fichero de configuración del proyecto tenemos configurado el DataSource de la base de datos H2.
 
