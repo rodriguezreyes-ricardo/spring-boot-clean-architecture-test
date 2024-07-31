@@ -55,6 +55,17 @@ Contamos con un fichero de inicialización (initilization.java) para introducir 
 
 También se utiliza Swagger UI para la generación de una consola API donde poder ejecutar pruebas de API Rest (<b>localhost:8080/swagger-ui.html</b>).
 
+En el paquete <b>domain</b> está la entidad de negocio del dominio
+
+En el paquete <b>application</b> tenemos los casos de uso y los puertos. Aquí el caso de uso es LoadPriceService, y es donde se encuentra la logica fundamental del negocio. LoadPriceService implementa el un puerto de entrada SearchPricePort quien es utilizado por el adaptador de entrada (controlador web). 
+
+SearchPricePort es por donde entrará la solicitud http proveniente del controlador. Ésta es una interfaz que define un contrato por lo que aisla al controlador de la implementación.
+
+En el paquete <b>adapter</b> se encuentran los adaptadores de entrada y salida (ProductPricesController y PricePersistenceAdapter respectivamente) permitiendo la interacción con el mundo exterior (Clientes RestAPI y persistencia de datos respectivamente).
+La persistencia utilizada es a través de JPA, para ello creamos repositorio y entidad encargados de la comunicación con la base de datos, y un mapper para el mapeo entre la entidad de dominio y la entidad de persistencia.
+
+La persistencia es utilizada dentro del adaptador de salida, asegurando la independencia de los contratos definidos en los puertos, además de focalizar en el adaptador de salida cualquier cambio de tipo de persistencia o base de datos. 
+
 ## Autor/es
 ---
 Ricardo Rodríguez Reyes
