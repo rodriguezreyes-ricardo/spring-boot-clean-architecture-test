@@ -17,6 +17,8 @@ public class Price {
 	/** The Constant INCORRECT_NUMBER_FORMAT. */
 	public static final String INCORRECT_NUMBER_FORMAT = "Should pass a correct number format";
 
+	public static final String NOT_FOUND = "Page not found";
+
 	/** The id. */
 	private Long id;
 
