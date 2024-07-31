@@ -2,6 +2,7 @@ spring:
   mvc:
    pathmatch:
      matching-strategy: ANT_PATH_MATCHER
+   throw-exception-if-no-handler-found: true
   application:
     name: productprices-app
   datasource:
@@ -18,5 +19,4 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
-
+      ddl-auto: create-drop   
