@@ -1,11 +1,16 @@
 package com.testjava.productprices;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.testjava.productprices.adapter.out.persistence.PriceEntity;
@@ -19,6 +24,9 @@ public class Initialization implements InitializingBean {
 
 	/** The init. */
 	private final SpringPriceRepository init;
+	
+	@Value("classpath:sample-data.csv")
+	private Resource resource;
 
 	/**
 	 * Instantiates a new initialization.
@@ -37,15 +45,16 @@ public class Initialization implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		List<PriceEntity> prices = new ArrayList<>();
+		List<String> lines = IOUtils.readLines(resource.getInputStream(), StandardCharsets.UTF_8);
 
-		prices.add(new PriceEntity(1L, Timestamp.valueOf("2020-06-14 00:00:00"),
-				Timestamp.valueOf("2020-12-31 23:59:59"), 1, 35455L, 0, BigDecimal.valueOf(35.50), "EUR"));
-		prices.add(new PriceEntity(1L, Timestamp.valueOf("2020-06-14 15:00:00"),
-				Timestamp.valueOf("2020-06-14 18:30:00"), 2, 35455L, 1, BigDecimal.valueOf(25.45), "EUR"));
-		prices.add(new PriceEntity(1L, Timestamp.valueOf("2020-06-15 00:00:00"),
-				Timestamp.valueOf("2020-06-15 11:00:00"), 3, 35455L, 1, BigDecimal.valueOf(30.50), "EUR"));
-		prices.add(new PriceEntity(1L, Timestamp.valueOf("2020-06-15 16:00:00"),
-				Timestamp.valueOf("2020-12-31 23:59:59"), 4, 35455L, 1, BigDecimal.valueOf(38.95), "EUR"));
+		for (String fields : lines) {
+			List<String> field = Arrays.asList(fields.split(","));
+			prices.add(new PriceEntity(Long.valueOf(field.get(0)), Timestamp.valueOf(field.get(7)),
+					Timestamp.valueOf(field.get(2)), Integer.valueOf(field.get(4)),
+					Long.valueOf(field.get(6)), Integer.valueOf(field.get(5)),
+					BigDecimal.valueOf(Float.valueOf(field.get(3))), field.get(1)));
+		}
+
 		this.init.saveAll(prices);
 
 	}
