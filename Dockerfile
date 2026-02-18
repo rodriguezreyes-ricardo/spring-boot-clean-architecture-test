@@ -1,14 +1,15 @@
+# Usamos la versión de mysql que permite instalar paquetes fácilmente
 FROM mysql:8.0
 
-# 1. Cambiamos a Debian para asegurar que apt-get funcione
-# Instalamos python3 para crear un servidor web falso en un segundo
-RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
+# 1. Forzamos la instalación de un servidor web mínimo (Python) 
+# usando el gestor de paquetes de Oracle Linux (dnf) que es el que trae esta imagen
+USER root
+RUN dnf install -y python3 && dnf clean all
 
-# 2. Exponemos el puerto de MySQL y el puerto 80 para Render
+# 2. Exponemos los puertos
 EXPOSE 3306
 EXPOSE 80
 
-# 3. El comando de inicio mágico:
-# Arranca MySQL en segundo plano (&)
-# Y luego arranca un servidor web ultra-simple en el puerto 80
-CMD ["sh", "-c", "mysqld & python3 -m http.server 80"]
+# 3. Comando de inicio: 
+# Arranca MySQL y un servidor web en el puerto 80 para engañar a Render
+CMD ["sh", "-c", "mysqld & sleep 10; python3 -m http.server 80"]
