@@ -1,0 +1,78 @@
+{
+  "groups": [
+    {
+      "name": "com.testjava.productprices.info",
+      "type": "com.testjava.productprices.SwaggerProperties",
+      "sourceType": "com.testjava.productprices.SwaggerProperties"
+    },
+    {
+      "name": "com.testjava.productprices.info.contact",
+      "type": "com.testjava.productprices.SwaggerProperties$Contact",
+      "sourceType": "com.testjava.productprices.SwaggerProperties",
+      "sourceMethod": "public com.testjava.productprices.SwaggerProperties.Contact getContact() "
+    },
+    {
+      "name": "com.testjava.productprices.info.license",
+      "type": "com.testjava.productprices.SwaggerProperties$License",
+      "sourceType": "com.testjava.productprices.SwaggerProperties",
+      "sourceMethod": "public com.testjava.productprices.SwaggerProperties.License getLicense() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "com.testjava.productprices.info.contact.email",
+      "type": "java.lang.String",
+      "description": "The email.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties$Contact"
+    },
+    {
+      "name": "com.testjava.productprices.info.contact.name",
+      "type": "java.lang.String",
+      "description": "The name.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties$Contact"
+    },
+    {
+      "name": "com.testjava.productprices.info.contact.url",
+      "type": "java.lang.String",
+      "description": "The url.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties$Contact"
+    },
+    {
+      "name": "com.testjava.productprices.info.description",
+      "type": "java.lang.String",
+      "description": "The description.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties"
+    },
+    {
+      "name": "com.testjava.productprices.info.license.name",
+      "type": "java.lang.String",
+      "description": "The name.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties$License"
+    },
+    {
+      "name": "com.testjava.productprices.info.license.url",
+      "type": "java.lang.String",
+      "description": "The url.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties$License"
+    },
+    {
+      "name": "com.testjava.productprices.info.terms-of-service-url",
+      "type": "java.lang.String",
+      "description": "The terms of service url.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties"
+    },
+    {
+      "name": "com.testjava.productprices.info.title",
+      "type": "java.lang.String",
+      "description": "The title.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties"
+    },
+    {
+      "name": "com.testjava.productprices.info.version",
+      "type": "java.lang.String",
+      "description": "The version.",
+      "sourceType": "com.testjava.productprices.SwaggerProperties"
+    }
+  ],
+  "hints": []
+}
