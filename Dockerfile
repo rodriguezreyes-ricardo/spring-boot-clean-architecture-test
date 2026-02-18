@@ -1,15 +1,16 @@
-# Usamos la versión de mysql que permite instalar paquetes fácilmente
-FROM mysql:8.0
+# MariaDB es un reemplazo directo de MySQL y usa Debian (más fácil de configurar)
+FROM mariadb:10.11
 
-# 1. Forzamos la instalación de un servidor web mínimo (Python) 
-# usando el gestor de paquetes de Oracle Linux (dnf) que es el que trae esta imagen
-USER root
-RUN dnf install -y python3 && dnf clean all
+# 1. Instalamos un servidor web ultra ligero (Python)
+RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
 
-# 2. Exponemos los puertos
+# 2. Variables de entorno por defecto (Render las sobreescribirá)
+ENV MARIADB_ROOT_PASSWORD=password
+ENV MARIADB_DATABASE=mydb
+
+# 3. Exponemos el puerto de la DB y el puerto 80 para engañar a Render
 EXPOSE 3306
 EXPOSE 80
 
-# 3. Comando de inicio: 
-# Arranca MySQL y un servidor web en el puerto 80 para engañar a Render
-CMD ["sh", "-c", "mysqld & sleep 10; python3 -m http.server 80"]
+# 4. El comando "mágico": arranca la DB y el servidor web para que Render vea "Live"
+CMD ["sh", "-c", "docker-entrypoint.sh mariadbd & sleep 10; python3 -m http.server 80"]
