@@ -1,8 +1,12 @@
-# Usamos MariaDB como base porque es lo más pesado de instalar
+# Usamos MariaDB como base
 FROM mariadb:10.11
 
-# 1. Instalamos phpMyAdmin y PHP
-RUN apt-get update && apt-get install -y \
+# 1. Evitamos preguntas interactivas durante la instalación
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 2. Instalamos phpMyAdmin y dependencias
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     phpmyadmin \
     php-mbstring \
     php-zip \
@@ -11,16 +15,17 @@ RUN apt-get update && apt-get install -y \
     php-curl \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Configuramos phpMyAdmin para que apunte al localhost (donde estará MariaDB)
+# 3. Configuración de phpMyAdmin para conectar internamente
 RUN echo "<?php \
-\$cfg['Servers'][1]['host'] = 'localhost'; \
+\$cfg['Servers'][1]['host'] = '127.0.0.1'; \
 \$cfg['Servers'][1]['compress'] = false; \
 \$cfg['Servers'][1]['AllowNoPassword'] = false; \
 ?>" > /etc/phpmyadmin/config.inc.php
 
-# 3. Exponemos el puerto 80 (para la web de phpMyAdmin)
-# MariaDB (3306) NO se expone, así que solo será accesible internamente
+# 4. Exponemos puertos
+EXPOSE 3306
 EXPOSE 80
 
-# 4. Script de inicio para arrancar ambos servicios
-CMD ["sh", "-c", "docker-entrypoint.sh mariadbd & php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
+# 5. COMANDO CMD CORREGIDO:
+# --bind-address=0.0.0.0 permite que otros servicios (Spring Boot) se conecten
+CMD ["sh", "-c", "docker-entrypoint.sh mariadbd --bind-address=0.0.0.0 & sleep 10; php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
