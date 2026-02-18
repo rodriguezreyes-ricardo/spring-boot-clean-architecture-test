@@ -5,8 +5,10 @@ FROM mariadb:10.11
 RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
 
 # 2. Variables de entorno por defecto (Render las sobreescribirá)
-ENV MARIADB_ROOT_PASSWORD=password
-ENV MARIADB_DATABASE=mydb
+ENV MARIADB_ROOT_PASSWORD=R3do-docente
+ENV MARIADB_DATABASE=docente
+ENV MARIADB_USER=docente
+ENV MARIADB_PASSWORD=R3do-docente
 
 # 3. Exponemos el puerto de la DB y el puerto 80 para engañar a Render
 EXPOSE 3306
