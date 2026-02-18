@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Abortar si hay un error
-set -o errexit
+set -e
 
-# Configurar Java usando asdf
-asdf install java openjdk-17
-asdf local java openjdk-17
+# 1. Encontrar la ruta real de Java en Render
+export JAVA_HOME=$(readlink -f $(which java) | sed "s:/bin/java::")
+export PATH=$JAVA_HOME/bin:$PATH
 
-# Dar permisos y ejecutar Maven
+# 2. Dar permisos al wrapper
 chmod +x mvnw
+
+# 3. Ejecutar la compilación
 ./mvnw clean install -DskipTests
