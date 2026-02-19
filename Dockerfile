@@ -28,4 +28,5 @@ EXPOSE 80
 
 # 5. COMANDO CMD MEJORADO:
 # Forzamos el puerto y la dirección para que Render lo detecte
-CMD ["sh", "-c", "mariadbd --bind-address=0.0.0.0 --port=3306 & sleep 5; php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
+# Usamos 'exec gosu mysql' o simplemente 'runuser' para que no sea root
+CMD ["sh", "-c", "runuser -u mysql -- mariadbd --bind-address=0.0.0.0 --port=3306 & sleep 5; php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
