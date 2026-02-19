@@ -29,4 +29,4 @@ EXPOSE 80
 # 5. COMANDO CMD MEJORADO:
 # Forzamos el puerto y la dirección para que Render lo detecte
 # Usamos 'exec gosu mysql' o simplemente 'runuser' para que no sea root
-CMD ["sh", "-c", "docker-entrypoint.sh mariadbd --bind-address=0.0.0.0 & sleep 10; php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
+CMD ["sh", "-c", "mariadbd --user=mysql --bind-address=0.0.0.0 --port=3306 & sleep 10; php -S 0.0.0.0:80 -t /usr/share/phpmyadmin"]
