@@ -6,7 +6,7 @@ spring:
   application:
     name: productprices-app
   datasource:
-    url: jdbc:mariadb://spring-boot-clean-architecture-test-1.onrender.com:3306/products
+    url: jdbc:mariadb://spring-boot-clean-architecture-test-1-srv:3306/products
     username: root
     password: R3do-docente
     driver-class-name: org.mariadb.jdbc.Driver		
@@ -20,11 +20,15 @@ spring:
       #enabled: true
       #path: /h2-console
   jpa:
-    show-sql: true		
-    database-platform: org.hibernate.dialect.MariaDB103Dialect
-    defer-datasource-initialization: true
+    show-sql: true
+    # Cambiamos a 'update' para no perder tus datos en cada reinicio
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+    # Mantenemos esto para dar tiempo a la DB a despertar
+    defer-datasource-initialization: true
 server:
   port: ${PORT:8080}   
 
