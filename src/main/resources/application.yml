@@ -6,7 +6,7 @@ spring:
   application:
     name: productprices-app
   datasource:
-    url: jdbc:mariadb://mariadb-docker:3306/products
+    url: jdbc:mariadb://spring-boot-clean-architecture-test-1:3306/products
     username: root
     password: R3do-docente
     driver-class-name: org.mariadb.jdbc.Driver		
