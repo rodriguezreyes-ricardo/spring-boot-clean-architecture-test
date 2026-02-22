@@ -9,41 +9,40 @@ RUN mvn clean package -DskipTests
 # -----------------------------
 # ETAPA 2: Contenedor final
 # -----------------------------
-FROM ubuntu:22.04
+FROM tomcat:9.0-jdk17
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Instalar dependencias: OpenJDK, Tomcat, MariaDB y PHP
+# Instalar MariaDB y PHP para phpMyAdmin
+USER root
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    curl \
-    unzip \
-    wget \
-    php php-mbstring php-zip php-gd php-json php-curl \
     mariadb-server \
-    tomcat9 tomcat9-admin tomcat9-common \
-    supervisor \
+    php php-mbstring php-zip php-gd php-json php-curl \
+    wget unzip curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Variables de entorno para MariaDB
+# Variables de entorno de MariaDB
 ENV MYSQL_ROOT_PASSWORD=root123
 ENV MYSQL_USER=usuario
 ENV MYSQL_PASSWORD=1234
 ENV MYSQL_DATABASE=mi_db
 
-# Copiar script SQL de inicialización
+# Copiar WAR
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+
+# Copiar init.sql para inicializar la DB
 COPY init.sql /docker-entrypoint-initdb.d/init.sql
 
-# Copiar WAR generado a Tomcat
-COPY --from=build /app/target/*.war /var/lib/tomcat9/webapps/ROOT.war
+# Copiar phpMyAdmin
+RUN wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip -O /tmp/pma.zip && \
+    unzip /tmp/pma.zip -d /usr/share/ && \
+    mv /usr/share/phpMyAdmin-*-all-languages /usr/share/phpmyadmin && \
+    rm /tmp/pma.zip
 
-# Copiar configuración de supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Exponer solo los puertos públicos
-# 8080 -> Tomcat
-# 8081 -> phpMyAdmin
+# Exponer puertos
 EXPOSE 8080 8081
 
-# Arrancar supervisord
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Script de arranque
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# CMD final
+CMD ["/usr/local/bin/docker-entrypoint.sh"]
