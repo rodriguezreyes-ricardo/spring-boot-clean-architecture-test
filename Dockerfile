@@ -60,4 +60,4 @@ priority=30\n\
 EXPOSE 3306
 EXPOSE 8080
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord"] 
