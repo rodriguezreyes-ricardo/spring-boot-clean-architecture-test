@@ -1,63 +1,49 @@
-FROM eclipse-temurin:17-jdk-jammy
+# -----------------------------
+# ETAPA 1: Build WAR con Maven
+# -----------------------------
+FROM maven:3.9.2-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# -----------------------------
+# ETAPA 2: Contenedor final
+# -----------------------------
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instalar MariaDB, Apache, PHP, phpMyAdmin y supervisor
+# Instalar dependencias: OpenJDK, Tomcat, MariaDB y PHP
 RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    apache2 \
-    php \
-    libapache2-mod-php \
-    php-mysql \
-    php-mbstring \
-    php-zip \
-    php-gd \
-    php-json \
-    php-curl \
-    phpmyadmin \
-    supervisor \
+    openjdk-17-jdk \
     curl \
+    unzip \
+    wget \
+    php php-mbstring php-zip php-gd php-json php-curl \
+    mariadb-server \
+    tomcat9 tomcat9-admin tomcat9-common \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
-# Configurar MariaDB
-RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld
+# Variables de entorno para MariaDB
+ENV MYSQL_ROOT_PASSWORD=root123
+ENV MYSQL_USER=usuario
+ENV MYSQL_PASSWORD=1234
+ENV MYSQL_DATABASE=mi_db
 
-# Instalar Tomcat
-ENV TOMCAT_VERSION=9.0.85
-RUN curl -fsSL https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz \
-    | tar -xzC /opt && \
-    mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
+# Copiar script SQL de inicialización
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
 
-ENV CATALINA_HOME=/opt/tomcat
-ENV PATH=$CATALINA_HOME/bin:$PATH
+# Copiar WAR generado a Tomcat
+COPY --from=build /app/target/*.war /var/lib/tomcat9/webapps/ROOT.war
 
-# Copiar WAR
-COPY target/*.war /opt/tomcat/webapps/ROOT.war
+# Copiar configuración de supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Hacer que Tomcat use el puerto dinámico de Render
-RUN sed -i 's/port="8080"/port="${PORT}"/' /opt/tomcat/conf/server.xml
+# Exponer solo los puertos públicos
+# 8080 -> Tomcat
+# 8081 -> phpMyAdmin
+EXPOSE 8080 8081
 
-# Configuración phpMyAdmin en /var/www/html/phpmyadmin
-RUN ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
-
-# Supervisor config
-RUN echo "[supervisord]\n\
-nodaemon=true\n\
-\n\
-[program:mysql]\n\
-command=/usr/sbin/mysqld\n\
-priority=10\n\
-\n\
-[program:tomcat]\n\
-command=/opt/tomcat/bin/catalina.sh run\n\
-priority=20\n\
-\n\
-[program:apache]\n\
-command=/usr/sbin/apachectl -D FOREGROUND\n\
-priority=30\n\
-" > /etc/supervisor/conf.d/supervisord.conf
-
-EXPOSE 3306
-EXPOSE 8080
-
-CMD ["/usr/bin/supervisord"] 
+# Arrancar supervisord
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
